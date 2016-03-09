@@ -5,7 +5,12 @@ from datetime import timedelta
 
 import django
 from django.utils.encoding import smart_str
-from django.core.cache import cache, get_cache
+try:
+    from django.core.cache import cache, get_cache
+except ImportError:
+    from django.core.cache import cache, caches
+    def get_cache(name):
+        return caches[name]
 
 from celery import current_app
 from celery.backends.base import KeyValueStoreBackend
